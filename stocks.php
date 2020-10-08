@@ -8,7 +8,7 @@ try {
 catch(PDOException $e) {
 	$_status = 500;
 	$rt['code'] = 50;
-	$rt['message'] = "System Error. Please contact with your system administrator.";
+	$rt['msg'] = "System Error. Please contact with your system administrator.";
 }
 /*database connection end*/
 $_request = $_SERVER['REQUEST_METHOD']; // get request method
@@ -20,13 +20,13 @@ if($_request == "GET") {
 		$list_data = $db->query("SELECT * FROM stocks ORDER BY created_date DESC")->fetchAll(PDO::FETCH_ASSOC);
 		$_status = 200;
 		$rt['code'] = 0;
-		$rt['message'] = "success";
+		$rt['msg'] = "success";
 		$rt['data'] = $list_data;
 	}
 	catch(PDOException $e) {
 		$_status = 500;
 		$rt['code'] = 51;
-		$rt['message'] = "System Error. Please contact with your system administrator.";
+		$rt['msg'] = "System Error. Please contact with your system administrator.";
 	}
 }
 elseif($_request == "POST") {
@@ -37,22 +37,22 @@ elseif($_request == "POST") {
 	if(( (int)$product_id != $product_id ) || empty($product_id)) {
 		$_status = 400;
 		$rt['code'] = 41;
-		$rt['message'] = "'product_id' value is required and must be integer.";
+		$rt['msg'] = "'product_id' value is required and must be integer.";
 	}
 	elseif(empty($name)) {
 		$_status = 400;
 		$rt['code'] = 42;
-		$rt['message'] = "'name' value is required.";
+		$rt['msg'] = "'name' value is required.";
 	}
 	elseif(( (int)$stock != $stock ) || empty($stock)) {
 		$_status = 400;
 		$rt['code'] = 43;
-		$rt['message'] = "'stock' value is required and must be integer.";
+		$rt['msg'] = "'stock' value is required and must be integer.";
 	}
 	elseif(!is_datetime($created_date) || empty($created_date)) {
 		$_status = 400;
 		$rt['code'] = 44;
-		$rt['message'] = "'created_date' value is required and must be date.";
+		$rt['msg'] = "'created_date' value is required and must be date.";
 	}
 	else {
 		try {
@@ -73,26 +73,28 @@ elseif($_request == "POST") {
 					->execute($add_data);
 				$_status = 201;
 				$rt['code'] = 0;
-				$rt['message'] = 'success';
-				$rt['data'] = $add_data;
+				$rt['msg'] = 'success';
+				$rt['data'] = $db
+					->query("SELECT * FROM stocks WHERE product_id=$product_id")
+					->fetch(PDO::FETCH_ASSOC);
 			}
 			else {
 				$_status = 400;
 				$rt['code'] = 40;
-				$rt['message'] = "'product_id' value must be unique and this row exists on database. $check_exist";
+				$rt['msg'] = "'product_id' value must be unique and this row exists on database. $check_exist";
 			}
 		}
 		catch(PDOException $e) {
 			$_status = 500;
 			$rt['code'] = 52;
-			$rt['message'] = 'System Error. Please contact with your system administrator.';
+			$rt['msg'] = 'System Error. Please contact with your system administrator.';
 		}
 	}
 }
 else {
 	$_status = 400;
 	$rt['code'] = 10;
-	$rt['message'] = "Your request is not valid.";
+	$rt['msg'] = "Your request is not valid.";
 }
 SetHeader($_status);
 echo json_encode($rt);
