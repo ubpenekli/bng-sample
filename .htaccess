@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^stocks stocks.php [QSA,L]
