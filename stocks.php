@@ -1,14 +1,24 @@
 <?php
-require_once("function.php"); // required simplest function file for the app. we don't have to explore america again :)
+// required simplest function file for the app. we don't have to explore america again :)
+try {
+	require_once("function.php");
+}
+catch(Exception $e) {
+	$_status = 204;
+	$rt = array(
+		"code" => 50,
+		"msg" => "Missing Files Error. Please contact with your system administrator."
+	);
+}
 /*database connection start*/
 try {
 	$db = new PDO("mysql:host=localhost;dbname=bng","root","1");
 	$db->query("SET CHARACTER SET utf8");
 }
 catch(PDOException $e) {
-	$_status = 500;
-	$rt['code'] = 50;
-	$rt['msg'] = "System Error. Please contact with your system administrator.";
+	$_status = 204;
+	$rt['code'] = 51;
+	$rt['msg'] = "Database Connection Error. Please contact with your system administrator.";
 }
 /*database connection end*/
 $_request = $_SERVER['REQUEST_METHOD']; // get request method
@@ -25,8 +35,8 @@ if($_request == "GET") {
 	}
 	catch(PDOException $e) {
 		$_status = 500;
-		$rt['code'] = 51;
-		$rt['msg'] = "System Error. Please contact with your system administrator.";
+		$rt['code'] = 52;
+		$rt['msg'] = "Database Action Error. Please contact with your system administrator.";
 	}
 }
 elseif($_request == "POST") {
@@ -86,15 +96,15 @@ elseif($_request == "POST") {
 		}
 		catch(PDOException $e) {
 			$_status = 500;
-			$rt['code'] = 52;
-			$rt['msg'] = 'System Error. Please contact with your system administrator.';
+			$rt['code'] = 53;
+			$rt['msg'] = 'Database Action Error. Please contact with your system administrator.';
 		}
 	}
 }
 else {
 	$_status = 400;
 	$rt['code'] = 10;
-	$rt['msg'] = "Your request is not valid.";
+	$rt['msg'] = "Your request type is not valid.";
 }
 SetHeader($_status);
 echo json_encode($rt);
