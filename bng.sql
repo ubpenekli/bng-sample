@@ -59,7 +59,7 @@ INSERT INTO `stocks` (`product_id`, `name`, `stock`, `created_date`) VALUES
 -- Tablo için indeksler `stocks`
 --
 ALTER TABLE `stocks`
-  ADD UNIQUE KEY `product_id` (`product_id`);
+  ADD PRIMARY KEY (`product_id`) USING BTREE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
