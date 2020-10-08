@@ -6,6 +6,7 @@
     <p>This project made by Uğur Batuhan Penekli for ByNoGame Job Application.</p>
     <p>The project includes GET and POST methods for stocks database table.</p>
     <p>You must import sql file to your database and change the connection variables from the line 15 on stocks.php to run the files. Or you can directly access live project on my website <a href="http://ubpenekli.com/bng">ubpenekli.com/bng</a> and you can use the /stocks route methods GET and POST.</p>
+    <p>For routing, I used .htaccess file because of make it on the most basic way. But when it needed, I can use different routing systems.
     <p>You do not need any parameter to use GET method of /stocks route. It will give you a simple list of stocks table data.</p>
     <p>Yo need to use 4 required parameters to use POST method.</p>
     <ul>
