@@ -12,7 +12,7 @@ catch(Exception $e) {
 }
 /*database connection start*/
 try {
-	$db = new PDO("mysql:host=localhost;dbname=bng","root","1");
+	$db = new PDO("mysql:host=localhost;dbname=ubpenekli_bng","ubpenekli_bng","._v60iNN]P&L");
 	$db->query("SET CHARACTER SET utf8");
 }
 catch(PDOException $e) {
@@ -40,26 +40,28 @@ if($_request == "GET") {
 	}
 }
 elseif($_request == "POST") {
-	$product_id = $_POST['product_id'];
+	$product_id = intval($_POST['product_id']);
 	$name = trim(addslashes($_POST['name']));
-	$stock = $_POST['stock'];
+	$stock = intval($_POST['stock']);
 	$created_date = $_POST['created_date'];
-	if(( (int)$product_id != $product_id ) || empty($product_id)) {
+	if( empty(preg_match("/^[0-9]*$/",$_POST['product_id'])) ) {
 		$_status = 400;
 		$rt['code'] = 41;
 		$rt['msg'] = "'product_id' value is required and must be integer.";
+		$rt['product_id'] = $product_id;
+		$rt['product_id_p'] = $_POST['product_id'];
 	}
 	elseif(empty($name)) {
 		$_status = 400;
 		$rt['code'] = 42;
 		$rt['msg'] = "'name' value is required.";
 	}
-	elseif(( (int)$stock != $stock ) || empty($stock)) {
+	elseif( empty(preg_match("/^[0-9]*$/",$_POST['stock'])) ) {
 		$_status = 400;
 		$rt['code'] = 43;
 		$rt['msg'] = "'stock' value is required and must be integer.";
 	}
-	elseif(!is_datetime($created_date) || empty($created_date)) {
+	elseif( !is_datetime($created_date) ) {
 		$_status = 400;
 		$rt['code'] = 44;
 		$rt['msg'] = "'created_date' value is required and must be date.";
